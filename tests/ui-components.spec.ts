@@ -44,4 +44,37 @@ test('Checkboxes', async ({page}) => {
     await page.getByText('Toastr').click()
 
     await page.getByRole('checkbox', {name: 'Hide on click'}).check({force: true})
+
+    const allBoxes = page.getByRole('checkbox')
+    for(const box of await allBoxes.all()) {
+        await box.uncheck({force: true})
+        await expect (box).not.toBeChecked()
+    }   
+})
+
+test('Lists and dropdowns', async ({page}) => {
+   await page.getByText('Modal & Overlays').click()
+    await page.getByText('Toastr').click()
+
+    //standard dropdown
+    await page.locator('.form-group', {hasText: "Toast type"}).getByRole('combobox').selectOption('info')
+    await expect(page.getByRole('combobox')).toHaveValue('info')
+
+    //custom dropdown
+    await page.locator('.form-group', {hasText: "Position: "}).locator('nb-select').click()
+  //option 1
+    //await page.getByRole('list').getByText('bottom-end').click()
+    //option 2
+await page.locator('nb-option', {hasText: 'bottom-end'}).click()
+await expect(page.locator('.form-group', {hasText: "Position: "}).locator('nb-select')).toHaveText('bottom-end')
+    
+//entire list into array and iterate through it
+const positionDropDownField = page.locator('.form-group', {hasText: "Position: "}).locator('nb-select')
+await positionDropDownField.click()
+const allListValues = await page.locator('nb-option').allTextContents()
+for (const value of allListValues) {
+   
+    await page.locator('nb-option', {hasText: value}).click()
+    await expect(positionDropDownField).toHaveText(value)
+    await positionDropDownField.click()}
 })

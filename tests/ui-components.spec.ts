@@ -25,4 +25,23 @@ test.describe('Form Layouts page', () => {
         await expect(usingTheGridEmailInput).toHaveValue('test2@test.com')
         await expect(usingTheGridEmailInput).toHaveValue(/test.com/)
     })
+
+    test('radio buttons', async ({page}) => {
+        const usingTheGridRadioButton = page.locator('nb-card', {hasText: "Using the Grid"})
+        await usingTheGridRadioButton.getByLabel('Option 1').check({force: true})
+       await usingTheGridRadioButton.getByRole('radio', {name: 'Option 2'}).check({force: true})
+
+       //const radioStatus =  await usingTheGridRadioButton.getByRole('radio', {name: 'Option 2'}).isChecked()
+       //expect(radioStatus).toBeTruthy()
+
+       await expect(usingTheGridRadioButton.getByRole('radio', {name: 'Option 1'})).not.toBeChecked()
+       await expect(usingTheGridRadioButton.getByRole('radio', {name: 'Option 2'})).toBeChecked()
+    })
+})
+
+test('Checkboxes', async ({page}) => {
+    await page.getByText('Modal & Overlays').click()
+    await page.getByText('Toastr').click()
+
+    await page.getByRole('checkbox', {name: 'Hide on click'}).check({force: true})
 })

@@ -165,3 +165,52 @@ currentMonthAndYear = await page.locator('nb-calendar-view-mode').textContent()
     await expect(calendarInputField).toHaveValue(expectedDate)
 
     })
+
+    test('slider', async ({page}) => {
+
+        //1 setting attribute values
+        //const tempGauge = page.locator('[tabtitle="Temperature"] ngx-temperature-dragger circle')
+       // await tempGauge.evaluate(element =>{
+        //    element.setAttribute('cx', '232.630')
+        //    element.setAttribute('cy', '232.630')
+       // })
+       // await tempGauge.click()
+
+        //2 mouse movement
+        const tempBox = page.locator('[tabtitle="Temperature"] ngx-temperature-dragger')
+        await tempBox.scrollIntoViewIfNeeded()
+
+        const box = await tempBox.boundingBox()
+        const x = box?.x + box?.width / 2
+        const y = box?.y + box?.height / 2
+        await page.mouse.move(x, y)
+        await page.mouse.down()
+        await page.mouse.move(x+100, y)
+        await page.mouse.move(x+100, y+100)
+        await page.mouse.up()
+        await expect(tempBox).toContainText('30')
+    })
+
+    test('iFrames', async ({page}) => {
+        await page.getByText('Modal & Overlays').click()
+            await page.getByText('Dialog').click()
+
+            const frameLocator = page.frameLocator('[data-cy="esc-close-iframe"]')
+            await frameLocator.getByRole('button', {name: 'Open Dialog with esc close'}).click()
+        
+    })
+
+    test('Drag & Drop', async ({page}) => {
+        await page.getByText('Extra Components').click()
+            await page.getByText('Drag & Drop').click()
+
+            //1
+        await page.getByText('Clean my room').dragTo(page.locator('#drop-list'))
+
+            //2
+        await page.getByText('Get groceries').hover()
+        await page.mouse.down()
+        await page.locator('#drop-list').hover()
+        await page.mouse.up()
+        
+    })

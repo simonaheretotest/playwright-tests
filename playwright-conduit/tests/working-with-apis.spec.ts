@@ -56,10 +56,7 @@ const newArticleResponse = await request.post('https://conduit-api.bondaracademy
 expect((newArticleResponse).status()).toEqual(201)
 
 await page.goto('https://conduit.bondaracademy.com');
-await page.getByText('Sign in').click()
- await page.getByRole('textbox', { name: 'Email' }).fill('sim@sim.com')
-  await page.getByRole('textbox', { name: 'Password' }).fill('12345678')
-  await page.getByRole('button', { name: 'Sign in' }).click()
+
  await expect(page.locator('.preview-link h1').first()).toContainText('Test title')
  await page.getByText('Test title').click()
  await page.getByRole('button', {name: "Delete Article"}).first().click()
@@ -69,10 +66,7 @@ await expect(page.locator('.preview-link h1').first()).not.toContainText('Test t
 
 test('Create article', async ({page, request}) => {
 await page.goto('https://conduit.bondaracademy.com');
-await page.getByText('Sign in').click()
- await page.getByRole('textbox', { name: 'Email' }).fill('sim@sim.com')
-  await page.getByRole('textbox', { name: 'Password' }).fill('12345678')
-  await page.getByRole('button', { name: 'Sign in' }).click()
+
 
   await page.getByText('New Article').click()
   await page.getByRole('textbox', { name: 'Article Title' }).fill('Playwright is awesome')
